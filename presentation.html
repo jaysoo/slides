@@ -1,21 +1,9 @@
-<!--
-Google IO 2012 HTML5 Slide Template
-
-Authors: Eric Bidelman <ebidel@gmail.com>
-         Luke Mahe <lukem@google.com>
-
-URL: https://code.google.com/p/io-2012-slides
--->
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Google IO 2012</title>
+  <title>Introduction to JavaScript</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
-  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-  <!--This one seems to work all the time, but really small on ipad-->
-  <!--<meta name="viewport" content="initial-scale=0.4">-->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="stylesheet" media="all" href="theme/css/default.css">
   <link rel="stylesheet" media="all" href="theme/css/app.css">
@@ -44,56 +32,26 @@ URL: https://code.google.com/p/io-2012-slides
 </slide>
 
 
-<slide class="image" >
-  
-    <hgroup>
-      <h2>Slide Title</h2>
-      <h3>Subtitle</h3>
-    </hgroup>
-    <article ><p><img alt="Mobile vs desktop users" src="image.png" /></p></article>
- 
-</slide>
-
-<slide class="segue dark nobackground" >
-  
-    <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
-    <hgroup class="auto-fadein">
-      <h2>Segue Slide</h2>
-      <h3>Subtitle</h3>
-    </hgroup>
-  
-</slide>
-
 <slide class="big" >
   
     <hgroup>
       <h2>Agenda</h2>
       <h3></h3>
     </hgroup>
-    <article ><p>Things we'll cover (list should build):</p>
+    <article ><p>Topics for today:</p>
 <ul class="build">
-<li>Bullet1</li>
-<li>Bullet2</li>
-<li>Bullet3</li>
+<li>Functions and scopes</li>
+<li>Type coercion</li>
+<li>Truthy and falsey values</li>
+<li>Prototypes</li>
 </ul></article>
- 
-</slide>
-
-<slide class="nobackground fill" >
-  
-    <hgroup>
-      <h2>Today</h2>
-      <h3></h3>
-    </hgroup>
-    <article ><p><img alt="Many kinds of devices." src="image.png" /></p>
-<footer class="source">source: place source info here</footer></article>
  
 </slide>
 
 <slide class="title-slide" >
   
     <hgroup>
-      <h2>Big Title Slide</h2>
+      <h2>Functions and Scopes</h2>
       <h3></h3>
     </hgroup>
     <article ></article>
@@ -103,13 +61,17 @@ URL: https://code.google.com/p/io-2012-slides
 <slide  >
   
     <hgroup>
-      <h2>Code Example</h2>
+      <h2>Function Syntax</h2>
       <h3></h3>
     </hgroup>
-    <article ><p>Media Queries are sweet:</p>
-<pre class="prettyprint" data-lang="css">
-@media screen and (max-width: 640px) {
-  #sidebar { display: none; }
+    <article ><p>Two ways to declare functions.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function foo () {
+  return 1;
+}
+
+var foo = function () {
+  return 1;
 }
 </pre></article>
  
@@ -118,24 +80,14 @@ URL: https://code.google.com/p/io-2012-slides
 <slide  >
   
     <hgroup>
-      <h2>Once more, with JavaScript</h2>
+      <h2>Anonymous Functions</h2>
       <h3></h3>
     </hgroup>
-    <article ><pre class="prettyprint" data-lang="javascript">
-function isSmall() {
-  return window.matchMedia("(min-device-width: ???)").matches;
-}
-
-function hasTouch() {
-  return Modernizr.touch;
-}
-
-function detectFormFactor() {
-  var device = DESKTOP;
-  if (hasTouch()) {
-    device = isSmall() ? PHONE : TABLET;
+    <article ><pre class="prettyprint" data-lang="javascript" contenteditable>
+function bar () {
+  return function () {
+    return 1;
   }
-  return device;
 }
 </pre></article>
  
@@ -156,7 +108,6 @@ function detectFormFactor() {
   <aside class="gdbar right"><img src="images/google_developers_icon_128.png"></aside>
   <article class="flexbox vleft auto-fadein">
     <h2>&lt;Thank You!&gt;</h2>
-    <p>Important contact information goes here.</p>
   </article>
   <p class="auto-fadein" data-config-contact>
     <!-- populated from slide_config.json -->
@@ -172,18 +123,6 @@ function detectFormFactor() {
 <slide class="backdrop"></slide>
 
 </slides>
-
-<script>
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-XXXXXXXX-1']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
-</script>
 
 <!--[if IE]>
   <script src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
