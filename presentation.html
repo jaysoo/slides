@@ -38,41 +38,131 @@
       <h2>Agenda</h2>
       <h3></h3>
     </hgroup>
-    <article ><p>Topics for today:</p>
+    <article ><p>Agenda for today:</p>
 <ul class="build">
 <li>Functions and scopes</li>
-<li>Type coercion</li>
-<li>Truthy and falsey values</li>
 <li>Prototypes</li>
+<li>Hands-on exercise</li>
 </ul></article>
  
 </slide>
 
-<slide class="title-slide" >
+<slide class="segue dark nobackground" >
   
-    <hgroup>
-      <h2>Functions and Scopes</h2>
+    <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Functions</h2>
       <h3></h3>
     </hgroup>
-    <article ></article>
+  
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Declaration syntax</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>Two ways to declare a function.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+// 1. Named function
+function f (a, b) {
+  // ...
+}
+
+// 2. Function expression
+var f = function (a, b) {
+  // ...
+}
+
+var myObj = {
+  // A member function
+  g: function (x, y) {
+    // ...
+  }
+};
+</pre>
+
+<p>For sake of clarity, we'll call member functions <em>methods</em>.</p></article>
  
 </slide>
 
 <slide  >
   
     <hgroup>
-      <h2>Function Syntax</h2>
+      <h2>Function invocation</h2>
       <h3></h3>
     </hgroup>
-    <article ><p>Two ways to declare functions.</p>
+    <article ><p>There are three ways to invoke a function.</p>
 <pre class="prettyprint" data-lang="javascript" contenteditable>
-function foo () {
-  return 1;
+function hello (name) {
+  console.log(name + ' says hello');
+}
+</pre>
+
+<ul>
+<li>
+<p>Execute it: <code>hello('Bob');</code></p>
+</li>
+<li>
+<p>.call(): <code>hello.call(window, 'Bob');</code></p>
+</li>
+<li>
+<p>.apply(): <code>hello.apply(window, ['Bob']);</code></p>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>What's `this`?</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul class="build">
+<li>
+<p>The keyword <code>this</code> inside a function refers to its context.</p>
+</li>
+<li>
+<p>A function's context depends on its declaration and invocation.</p>
+</li>
+<li>
+<p>This can be a great source of confusion. :(</p>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Function context based on declaration</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul>
+<li>
+<p>For functions, <code>this</code> is the global context (e.g. window).</p>
+</li>
+<li>
+<p>For methods, <code>this</code> is the object the method belongs to.</p>
+</li>
+</ul>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function hello () {
+  console.log(this + ' says hello');
 }
 
-var foo = function () {
-  return 1;
-}
+var bob = {
+  name: 'Bob',
+  toString: function () { return this.name; },
+  hello: function() {
+    console.log(this + ' says hello');
+  }
+};
+
+hello(); // '[object Window] says hello'
+bob.hello(); // 'Bob says hello'
 </pre></article>
  
 </slide>
@@ -80,15 +170,125 @@ var foo = function () {
 <slide  >
   
     <hgroup>
-      <h2>Anonymous Functions</h2>
+      <h2>Function context based on invocation</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>The context of functions and methods can be modified via <code>.call()</code>
+and <code>.apply()</code>.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function hello () {
+  console.log(this + ' says hello');
+}
+
+var bob = {
+  name: 'Bob',
+  toString: function () { return this.name; },
+  hello: function() {
+    console.log(this + ' says hello');
+  }
+};
+
+hello.call('Joe'); // 'Joe says hello'
+bob.hello.call('Joe'); // 'Joe says hello'
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Function.prototype.bind</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><code>Function.prototype.bind</code> returns a new function that, when called,
+will call the original function with the bound context.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function hello () {
+  console.log('Hello ' + this.name);
+}
+
+var helloBob = hello.bind({name: 'Bob'});
+helloBob(); // 'Hello Bob'
+
+helloBob.call({name: 'Joe'}); // 'Hello Bob'
+</pre></article>
+ 
+</slide>
+
+<slide class="segue dark nobackground" >
+  
+    <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Scopes</h2>
+      <h3></h3>
+    </hgroup>
+  
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>JavaScript only has function scopes. (no block scopes)</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+var x = 1;
+var y = 2;
+
+function foo () {
+  var x = 3;
+}
+
+if (true) {
+  var y = 4;
+  foo();
+}
+
+console.log(x); // 1
+console.log(y); // 4
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Closure</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul class="build">
+<li>
+<p>A closure is a function or reference to a function together with
+a referencing environment.</p>
+</li>
+<li>
+<p>Allows a function to access non-local variables even when invoked
+outsides of its lexical scope.</p>
+</li>
+<li>
+<p>It's actually very simple!</p>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Closure example</h2>
       <h3></h3>
     </hgroup>
     <article ><pre class="prettyprint" data-lang="javascript" contenteditable>
-function bar () {
-  return function () {
-    return 1;
-  }
+function makeAdder (a) {
+  return function (b) {
+    // `a` is non-local
+    return a + b;
+  };
 }
+
+var plusOne = makeAdder(1);
+plusOne(2); // 3
 </pre></article>
  
 </slide>
@@ -96,10 +296,280 @@ function bar () {
 <slide  >
   
     <hgroup>
-      <h2>Centered content</h2>
+      <h2>Scope chain</h2>
       <h3></h3>
     </hgroup>
-    <article class="flexbox vcenter"><p>This content should be centered!</p></article>
+    <article ><p>A function resolves non-local variables by tracing the scope chain.</p>
+<p>The resolution first goes to the immediate parent, and steps all the
+way up until <code>window</code> is reached.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+// Global var
+window.x = 1;
+
+function f () {
+  var y = 2;
+  var z = 3;
+  function g () {
+    var z = 5;
+    console.log(x, y, z);
+  }
+  g();
+}
+
+f(); // 1 2 5
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Immediately Invoked Function Expressions (IIFE)</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>An anonymous function can be immediately invoked to create
+a new context.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+(function () {
+  // ...
+}());
+</pre>
+
+<p>This is useful for creating "private" variables.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+var x = 1;
+
+(function () {
+  var x = 2;
+  console.log(x); // 2
+}());
+
+console.log(x); // 1
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Module pattern</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>An IIFE that returns an object is called a <strong>module</strong>.</p>
+<p>This pattern hides internal module implemetations, and
+creates privacy for its variables.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+var CounterModule = (function () {
+  var counter = 0;
+  return {
+    get: function () { return counter; },
+    increment: function () { return ++counter; },
+    reset: function () {
+      console.log('resetting counter');
+      counter = 0;
+    }
+  };
+}());
+CounterModule.get(); // 0
+CounterModule.increment(); // 1
+CounterModule.reset(); // 'resetting counter'
+</pre></article>
+ 
+</slide>
+
+<slide class="segue dark nobackground" >
+  
+    <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
+    <hgroup class="auto-fadein">
+      <h2>Prototypes</h2>
+      <h3></h3>
+    </hgroup>
+  
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Object prototypes</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>All object types in JavaScript have a special <code>prototype</code> property.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+Boolean.prototype;
+Number.prototype;
+String.prototype;
+Object.prototype;
+Array.prototype;
+Date.prototype;
+RegExp.prototype;
+</pre>
+
+<p>The prototype object holds properties and methods for a "class".</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+Number.prototype.toFixed;
+String.prototype.split;
+Object.prototype.toString;
+Date.prototype.getTime;
+Array.prototype.slice;
+RegExp.prototype.test;
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Function as constructors</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>Every function can be used as a constructor
+by using the <code>new</code> operator.</p>
+<p>You can think of these functions as "classes".</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function Foo () {
+  this.bar = function () {
+    console.log('foobar')
+  };
+};
+
+var foo = new Foo();
+
+foo.bar(); // 'foobar'
+</pre>
+
+<p>Note: When function is called using the <code>new</code> operator, the <code>this</code>
+keyword refers to the new instance.</p></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Prototypes on functions</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul>
+<li>
+<p>Functions have a special <code>prototype</code> object attached to them.</p>
+</li>
+<li>
+<p>When an instance is newed using a function, it shares all of
+the properties of its <code>prototype</code>.</p>
+</li>
+<li>
+<p>This allows instances to share methods and properties.</p>
+</li>
+</ul>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function Foo () {};
+Foo.prototype.x = {};
+var foo1 = new Foo();
+var foo2 = new Foo();
+console.log(foo1.x === foo2.x); // true
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Inheritance chain</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul>
+<li>When an object is instantiated, it actually has two prototypes set.<ul>
+<li>The prototype of the function/"class" (<code>.prototype</code>)</li>
+<li>An internal pointer of the original prototype (<code>__proto__</code> or
+  <code>Object.getPrototypeOf()</code>)</li>
+</ul>
+</li>
+</ul>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function Person () {};
+Person.prototype.kick = function (type) {
+  console.log(type + ' kick');
+};
+function ChuckNorris () {};
+ChuckNorris.prototype = new Person();
+ChuckNorris.prototype.kick = function () {
+  Object.getPrototypeOf(this).kick('Roundhouse');
+};
+var chuck = new ChuckNorris();
+chuck.kick(); // 'Roundhouse kick'
+
+chuck instanceof Person && chuck instanceof ChuckNorris; // true
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>A few caveats...</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul class="build">
+<li><code>Object.getPrototypeOf()</code> is only available in ES5.</li>
+<li><code>__proto__</code> is non-standard and not in all browsers.</li>
+<li>
+<p>We can get around this by manually setting a "super" prototype property.</p>
+<p><pre class="prettyprint" data-lang="javascript" contenteditable>
+function Person () {};
+Person.prototype.kick = function (type) {
+  console.log(type + ' kick');
+};</p>
+<p>function ChuckNorris () {};
+ChuckNorris.prototype = new Person();
+ChuckNorris.__super__ = Person.prototype;
+ChuckNorris.prototype.kick = function () {
+  ChuckNorris.__super__.kick('Roundhouse');
+};
+</pre></p>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Another problem</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul>
+<li>
+<p>The constructor of the "super" prototype is called
+    whenever a new prototype inherits from it.</p>
+</li>
+<li>
+<p>Two ways around it</p>
+<ul>
+<li>Using <code>Object.create()</code></li>
+<li>Using a surrogate function</li>
+</ul>
+</li>
+</ul>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function Foo () { console.log('Foo constructor called!'); }
+function Bar () {};
+Bar.prototype = new Foo(); // 'Foo constructor called!'
+
+Bar.prototype = Object.create(Foo.prototype); // Only in ES5
+
+function Surrogate () {};
+Surrogate.prototype = Foo.prototype;
+Bar.prototype = new Surrogate();
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Exercise</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>Address book</p></article>
  
 </slide>
 
