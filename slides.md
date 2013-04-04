@@ -5,7 +5,7 @@ build_lists: true
 Agenda for today:
 
 - Functions and scopes
-- Prototypes
+- Prototypes and inheritance
 - Hands-on exercise
 
 ---
@@ -67,7 +67,9 @@ build_lists: true
 
 - A function's context depends on its declaration and invocation.
 
-- This can be a great source of confusion. :(
+- This can be a source of confusion. :(
+
+- Let's clear this up!
 
 ---
 
@@ -140,6 +142,37 @@ helloBob.call({name: 'Joe'}); // 'Hello Bob'
 
 ---
 
+title: Aside - jQuery.proxy
+
+jQuery provides a method for binding a context to a function without
+using the `Function.prototype.bind` method.
+
+This is useful when supporting older browsers that does not implement
+the native method.
+
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function hello () {
+  console.log('Hello ' + this.name);
+}
+
+var helloBob = $.proxy(hello, {name: 'Bob'});
+helloBob(); // 'Hello Bob'
+</pre>
+
+---
+
+title: Exercise
+class: big
+
+For DOM event handlers, the context `this` is always the HTMLElement
+object that triggered the event.
+
+There is a bug in the following jQuery snippet. Can you fix it using `$.proxy` or `Object.prototype.bind`?
+
+<iframe width="100%" height="100" src="http://jsfiddle.net/jaysoo/XUBjP/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+
+---
+
 title: Scopes
 class: segue dark nobackground
 
@@ -177,7 +210,7 @@ a referencing environment.
 - Allows a function to access non-local variables even when invoked
 outsides of its lexical scope.
 
-- It's actually very simple!
+- Let's see an example!
 
 ---
 
@@ -219,6 +252,60 @@ function f () {
 }
 
 f(); // 1 2 5
+</pre>
+
+---
+
+title: Variable hoisting
+
+- When the `var` keyword is used inside a function, the JavaScript
+    engine "hoists" it up to the top of the function.
+
+- For this reason, it is generally a good idea to declare all variables
+    at the top of the function.
+
+---
+
+title: Variable hoisting (cont.)
+
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function foo () {
+  for (var i = 0; i < 10; i++) {
+    console.log(i);
+  }
+  var x = 'Hello';
+  console.log(x + ' World!');
+}
+
+function foo () {
+  var i, x;
+  for (i = 0; i < 10; i++) {
+    console.log(i);
+  }
+  x = 'Hello';
+  console.log(x + ' World!');
+}
+</pre>
+
+---
+
+title: Function hoisting
+
+Functions are always hoisted to the very top (before `var`s).
+
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function foo () {
+  var bar = function () { return 1; }
+  function bar () { return 2; }
+  return bar();
+}
+foo(); // 1
+
+function faz () {
+  return baz();
+  function baz () { return 3; }
+}
+faz(); // 3
 </pre>
 
 ---
@@ -423,4 +510,8 @@ Bar.prototype = new Surrogate();
 
 title: Exercise
 
-Address book
+Let's build a contact book app!
+
+[Exercise on jsFiddle](http://jsfiddle.net/jaysoo/REFt6/) (Please fork!)
+
+[Answers](http://jsfiddle.net/jaysoo/kc5J4/)

@@ -41,7 +41,7 @@
     <article ><p>Agenda for today:</p>
 <ul class="build">
 <li>Functions and scopes</li>
-<li>Prototypes</li>
+<li>Prototypes and inheritance</li>
 <li>Hands-on exercise</li>
 </ul></article>
  
@@ -128,7 +128,10 @@ function hello (name) {
 <p>A function's context depends on its declaration and invocation.</p>
 </li>
 <li>
-<p>This can be a great source of confusion. :(</p>
+<p>This can be a source of confusion. :(</p>
+</li>
+<li>
+<p>Let's clear this up!</p>
 </li>
 </ul></article>
  
@@ -215,6 +218,40 @@ helloBob.call({name: 'Joe'}); // 'Hello Bob'
  
 </slide>
 
+<slide  >
+  
+    <hgroup>
+      <h2>Aside - jQuery.proxy</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>jQuery provides a method for binding a context to a function without
+using the <code>Function.prototype.bind</code> method.</p>
+<p>This is useful when supporting older browsers that does not implement
+the native method.</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function hello () {
+  console.log('Hello ' + this.name);
+}
+
+var helloBob = $.proxy(hello, {name: 'Bob'});
+helloBob(); // 'Hello Bob'
+</pre></article>
+ 
+</slide>
+
+<slide class="big" >
+  
+    <hgroup>
+      <h2>Exercise</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>For DOM event handlers, the context <code>this</code> is always the HTMLElement
+object that triggered the event.</p>
+<p>There is a bug in the following jQuery snippet. Can you fix it using <code>$.proxy</code> or <code>Object.prototype.bind</code>?</p>
+<iframe width="100%" height="100" src="http://jsfiddle.net/jaysoo/XUBjP/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe></article>
+ 
+</slide>
+
 <slide class="segue dark nobackground" >
   
     <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
@@ -267,7 +304,7 @@ a referencing environment.</p>
 outsides of its lexical scope.</p>
 </li>
 <li>
-<p>It's actually very simple!</p>
+<p>Let's see an example!</p>
 </li>
 </ul></article>
  
@@ -317,6 +354,76 @@ function f () {
 }
 
 f(); // 1 2 5
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Variable hoisting</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul>
+<li>
+<p>When the <code>var</code> keyword is used inside a function, the JavaScript
+    engine "hoists" it up to the top of the function.</p>
+</li>
+<li>
+<p>For this reason, it is generally a good idea to declare all variables
+    at the top of the function.</p>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Variable hoisting (cont.)</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="javascript" contenteditable>
+function foo () {
+  for (var i = 0; i < 10; i++) {
+    console.log(i);
+  }
+  var x = 'Hello';
+  console.log(x + ' World!');
+}
+
+function foo () {
+  var i, x;
+  for (i = 0; i < 10; i++) {
+    console.log(i);
+  }
+  x = 'Hello';
+  console.log(x + ' World!');
+}
+</pre></article>
+ 
+</slide>
+
+<slide  >
+  
+    <hgroup>
+      <h2>Function hoisting</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>Functions are always hoisted to the very top (before <code>var</code>s).</p>
+<pre class="prettyprint" data-lang="javascript" contenteditable>
+function foo () {
+  var bar = function () { return 1; }
+  function bar () { return 2; }
+  return bar();
+}
+foo(); // 1
+
+function faz () {
+  return baz();
+  function baz () { return 3; }
+}
+faz(); // 3
 </pre></article>
  
 </slide>
@@ -569,7 +676,9 @@ Bar.prototype = new Surrogate();
       <h2>Exercise</h2>
       <h3></h3>
     </hgroup>
-    <article ><p>Address book</p></article>
+    <article ><p>Let's build a contact book app!</p>
+<p><a href="http://jsfiddle.net/jaysoo/REFt6/">Exercise on jsFiddle</a> (Please fork!)</p>
+<p><a href="http://jsfiddle.net/jaysoo/kc5J4/">Answers</a></p></article>
  
 </slide>
 
